@@ -9,7 +9,7 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
-# FOR LOCAL DEVELOPMENT ONLY - RISK MAN-IN-MIDDLE ATTACKS
+# # FOR LOCAL DEVELOPMENT ONLY - RISK MAN-IN-MIDDLE ATTACKS
 # import ssl
 # ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -126,6 +126,10 @@ def plot_interactive_department(data_df, geo_df, department_code, selected_stars
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
+# App set up
+app.title = 'Michelin Guide to France - pineapple-bois'
+app.index_string = open('assets/custom_header.html', 'r').read()
+
 # Use geo_df to get unique regions and departments for the initial dropdowns
 unique_regions = geo_df['region'].unique()
 initial_departments = geo_df[geo_df['region'] == unique_regions[0]][['department', 'code']].drop_duplicates().to_dict('records')
@@ -237,7 +241,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=port)
 
 
-# # For local development, just run the app on the default port 8050
+# For local development, just run the app on the default port 8050
 # if __name__ == '__main__':
 #     app.run_server(debug=True)
 
