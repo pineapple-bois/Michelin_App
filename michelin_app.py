@@ -127,18 +127,18 @@ def plot_interactive_department(data_df, geo_df, department_code, selected_stars
 
 # Initialize the Dash app
 server = Flask(__name__)
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], server=server)
+app = dash.Dash(
+    __name__,
+    external_stylesheets=[dbc.themes.BOOTSTRAP],
+    server=server)
 
 
-# Uncomment to launch on Heroku with HTTPS enforcement
+# Comment out to launch locally (development)
 @server.before_request
 def before_request():
-    # Check if the request is not secure (i.e., not HTTPS) and is not running locally
-    if 'DYNO' in os.environ:  # Only run this on Heroku, not locally
-        if request.endpoint in app.url_map.endpoints and not request.is_secure:
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
+    if not request.is_secure:
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url, code=301)
 
 
 # App set up
@@ -252,8 +252,13 @@ def update_map(selected_department):
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run_server(debug=False)
+
+
+# Old Dash server
+# if __name__ == '__main__':
+#     port = int(os.environ.get('PORT', 5000))
+#     app.run(host='0.0.0.0', port=port)
 
 
 # For local development, just run the app on the default port 8050
