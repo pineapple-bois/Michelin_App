@@ -8,7 +8,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
-from flask import redirect, request
+from flask import Flask, redirect, request
 
 
 # # FOR LOCAL DEVELOPMENT ONLY - RISK MAN-IN-MIDDLE ATTACKS
@@ -126,8 +126,8 @@ def plot_interactive_department(data_df, geo_df, department_code, selected_stars
 
 
 # Initialize the Dash app
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
-server = app.server
+server = Flask(__name__)
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP], server=server)
 
 
 # Uncomment to launch on Heroku with HTTPS enforcement
