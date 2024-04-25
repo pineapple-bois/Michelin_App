@@ -126,6 +126,15 @@ def plot_interactive_department(data_df, geo_df, department_code, selected_stars
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
+
+# Comment out to launch locally (development)
+@server.before_request
+def before_request():
+    if not request.is_secure:
+        url = request.url.replace('http://', 'https://', 1)
+        return redirect(url, code=301)
+
+
 # App set up
 app.title = 'Michelin Guide to France - pineapple-bois'
 app.index_string = open('assets/custom_header.html', 'r').read()
