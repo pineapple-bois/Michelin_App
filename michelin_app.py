@@ -9,9 +9,11 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
+
 # # FOR LOCAL DEVELOPMENT ONLY - RISK MAN-IN-MIDDLE ATTACKS
 # import ssl
 # ssl._create_default_https_context = ssl._create_unverified_context
+
 
 # Load restaurant data
 url = ("https://raw.githubusercontent.com/pineapple-bois/Michelin_Rated_Restaurants"
@@ -127,12 +129,12 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 
-# Comment out to launch locally (development)
-@server.before_request
-def before_request():
-    if not request.is_secure:
-        url = request.url.replace('http://', 'https://', 1)
-        return redirect(url, code=301)
+# # Comment out to launch locally (development)
+# @server.before_request
+# def before_request():
+#     if not request.is_secure:
+#         url = request.url.replace('http://', 'https://', 1)
+#         return redirect(url, code=301)
 
 
 # App set up
