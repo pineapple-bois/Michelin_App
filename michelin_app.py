@@ -8,6 +8,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 from dash.dependencies import Input, Output
+from flask import redirect, request
 
 
 # # FOR LOCAL DEVELOPMENT ONLY - RISK MAN-IN-MIDDLE ATTACKS
@@ -129,12 +130,15 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 server = app.server
 
 
-# # Comment out to launch locally (development)
-# @server.before_request
-# def before_request():
-#     if not request.is_secure:
-#         url = request.url.replace('http://', 'https://', 1)
-#         return redirect(url, code=301)
+# Uncomment to launch on Heroku with HTTPS enforcement
+@server.before_request
+def before_request():
+    # Check if the request is not secure (i.e., not HTTPS) and is not running locally
+    if 'DYNO' in os.environ:  # Only run this on Heroku, not locally
+        if request.endpoint in app.url_map.endpoints and not request.is_secure:
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
 
 
 # App set up
